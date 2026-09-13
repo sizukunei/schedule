@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>课程安排 - 2026-2027学年第一学期</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Microsoft YaHei","PingFang SC","Helvetica Neue",sans-serif;-webkit-tap-highlight-color:transparent}
+body{background:linear-gradient(160deg,#eef2ff 0%,#f6f0ff 45%,#eafaf4 100%);min-height:100vh;padding:16px}
+.wrap{max-width:1120px;margin:0 auto}
+h1{font-size:clamp(18px,2.6vw,24px);margin-bottom:4px;color:#3b3f66;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.badge{background:linear-gradient(135deg,#7c6cff,#5ea8ff);color:#fff;border-radius:20px;font-size:12px;padding:2px 10px;font-weight:normal}
+.sub{color:#8b8fb5;font-size:13px;margin-bottom:14px}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
+.card{position:relative;overflow:hidden;background:rgba(255,255,255,.92);border-radius:16px;padding:14px 16px;box-shadow:0 4px 14px rgba(70,80,140,.08);border:1px solid rgba(255,255,255,.8)}
+.card::after{content:"";position:absolute;right:-18px;top:-18px;width:70px;height:70px;border-radius:50%;background:radial-gradient(circle at center,rgba(124,108,255,.12),transparent 70%)}
+.card .k{color:#9aa0c4;font-size:12px;margin-bottom:4px}
+.card .v{font-size:clamp(17px,2.2vw,20px);font-weight:bold;color:#3b3f66}
+.card .v small{font-size:12px;color:#9aa0c4;font-weight:normal}
+.controls{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.controls label{font-size:14px;color:#6a6f96}
+.controls select{border:1px solid #d9def0;border-radius:12px;padding:8px 12px;font-size:14px;background:#fff;color:#3b3f66;outline:none;box-shadow:0 2px 6px rgba(70,80,140,.06)}
+.controls .tip{color:#9aa0c4;font-size:12px}
+/* ===== 桌面端课表表格 ===== */
+.desktop{display:block}
+.tbl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:18px;box-shadow:0 6px 20px rgba(70,80,140,.10)}
+table{border-collapse:separate;border-spacing:0;width:100%;min-width:760px;background:#fff}
+thead th{position:sticky;top:0;background:linear-gradient(135deg,#7c6cff,#5ea8ff);color:#fff;padding:10px 6px;font-weight:normal;font-size:13px}
+thead th.todayhead{background:linear-gradient(135deg,#ff9f43,#ff7e5f)}
+th,td{border-bottom:1px solid #eef1fa;border-right:1px solid #eef1fa;text-align:center;vertical-align:top}
+th:last-child,td:last-child{border-right:none}
+tbody tr:last-child td{border-bottom:none}
+td.lesson{background:#f7f8ff;color:#6a6f96;font-weight:bold;padding:8px 4px;min-width:64px}
+td.lesson .tspan{display:block;color:#a8accc;font-size:11px;font-weight:normal;margin-top:2px;white-space:nowrap}
+td.cell-today{background:#fff7ef!important}
+td.cell-other{background:#fff}
+td.dayhead{background:#f4f5ff;color:#6a6f96;font-size:14px}
+td.cell-today .dayhead{background:#ffe9d2;color:#d97b1f}
+.course{position:relative;margin:3px;padding:8px 6px;border-radius:12px;min-height:56px;display:flex;flex-direction:column;gap:2px;transition:transform .15s,box-shadow .15s}
+.course:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(70,80,140,.15)}
+.course .t{font-weight:bold;font-size:12px;color:#3b3f66;word-break:break-word}
+.course .tm{font-size:11px;color:#667}
+.course .rm{font-size:11px;color:#667;opacity:.9}
+.course .tc{font-size:10px;color:#667;opacity:.75}
+.course.past{filter:grayscale(.7);opacity:.55}
+.empty{color:#d6daf0;font-size:12px;padding:8px 4px}
+.legend{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+.legend .lb{flex:1;min-width:180px;background:rgba(255,255,255,.85);border-radius:12px;padding:10px 12px;font-size:12px;color:#6a6f96;border-left:4px solid}
+.legend .lb b{display:block;color:#3b3f66;font-size:13px;margin-bottom:2px}
+.lb.a{border-color:#7c6cff}.lb.b{border-color:#5ea8ff}.lb.c{border-color:#ff9f43}
+/* 课程调色板 */
+.c0{background:#e8e4ff}.c1{background:#d8ecff}.c2{background:#d9f6ec}.c3{background:#ffe9e0}
+.c4{background:#fff3d6}.c5{background:#ffe3f0}.c6{background:#e3f4ff}.c7{background:#eef5d9}
+/* ===== 手机端按天卡片列表 ===== */
+.mobile{display:none}
+.m-days{display:flex;gap:8px;overflow-x:auto;padding:2px 0 10px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.m-days::-webkit-scrollbar{display:none}
+.m-day{flex:0 0 auto;min-width:64px;text-align:center;background:#fff;border-radius:14px;padding:8px 6px;box-shadow:0 2px 8px rgba(70,80,140,.08);cursor:pointer;border:2px solid transparent}
+.m-day .dw{font-size:12px;color:#8b8fb5}
+.m-day .dd{font-size:13px;font-weight:bold;color:#3b3f66;margin-top:2px}
+.m-day.on{border-color:#ff9f43;background:#fff7ef}
+.m-day.on .dw{color:#d97b1f}
+.m-day.today-mark{position:relative}
+.m-day.today-mark::after{content:"今";position:absolute;top:-6px;right:-4px;background:#ff9f43;color:#fff;font-size:10px;border-radius:8px;padding:0 5px}
+.m-lists{margin-top:4px}
+.m-list{display:none}
+.m-list.on{display:block}
+.m-empty-card{background:#fff;border-radius:16px;padding:28px 16px;text-align:center;color:#b3b8d6;font-size:14px;box-shadow:0 4px 14px rgba(70,80,140,.06)}
+.m-item{position:relative;overflow:hidden;background:#fff;border-radius:16px;padding:12px 14px;margin-bottom:10px;box-shadow:0 4px 14px rgba(70,80,140,.07);border-left:5px solid}
+.m-item .clr{position:absolute;left:0;top:0;bottom:0;width:5px}
+.m-item .t{font-weight:bold;font-size:15px;color:#3b3f66;margin-bottom:6px}
+.m-item .row{display:flex;justify-content:space-between;font-size:13px;color:#6a6f96;margin-top:4px}
+.m-item .row .k{color:#9aa0c4}
+.m-item.past{opacity:.55;filter:grayscale(.7)}
+@media(max-width:760px){
+  body{padding:10px}
+  .cards{grid-template-columns:repeat(2,1fr);gap:10px}
+  .desktop{display:none}
+  .mobile{display:block}
+  .legend .lb{min-width:100%}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>课程安排 <span class="badge" id="semester"></span></h1>
+  <div class="sub" id="subinfo"></div>
+  <div class="cards">
+    <div class="card"><div class="k">当前周</div><div class="v" id="cweek">-</div></div>
+    <div class="card"><div class="k">今天日期</div><div class="v" id="cdate">-</div></div>
+    <div class="card"><div class="k">今天课程</div><div class="v" id="ctoday">-</div></div>
+    <div class="card"><div class="k">本周上课门数</div><div class="v" id="ccount">-</div></div>
+  </div>
+  <div class="controls">
+    <label>查看周次：</label><select id="weekSel"></select>
+    <span class="tip">（默认显示当前周，今天已高亮）</span>
+  </div>
+
+  <!-- 桌面端表格 -->
+  <div class="desktop"><div class="tbl-scroll" id="grid"></div></div>
+
+  <!-- 手机端列表 -->
+  <div class="mobile">
+    <div class="m-days" id="mDays"></div>
+    <div class="m-lists" id="mLists"></div>
+  </div>
+
+  <div class="legend">
+    <div class="lb a"><b>上午</b>09:00 起 · 5 节（第 2-3 节间课间 10 分钟）</div>
+    <div class="lb b"><b>下午</b>14:10 起 · 4 节</div>
+    <div class="lb c"><b>晚上</b>19:00 起 · 4 节</div>
+  </div>
+</div>
+
+<script>
+var DATA = {"semester": "2026-2027学年第一学期", "week1_monday": "2026-09-07", "today": "2026-09-13", "weekday_cn": ["", "周一", "周二", "周三", "周四", "周五", "周六", "周日"], "by_week": {"1": [{"name": "Java程序设计基础", "teacher": "曾光辉", "weekday": 4, "startLesson": 1, "len": 4, "classroom": "从化校区 计算机楼 201", "date": "2026-09-10"}, {"name": "模拟电子技术", "teacher": "李政楠", "weekday": 5, "startLesson": 1, "len": 3, "classroom": "从化校区 计算机楼 202", "date": "2026-09-11"}], "2": [{"name": "习近平新时代中国特色社会主义思想概论", "teacher": "张运萍", "weekday": 1, "startLesson": 1, "len": 3, "classroom": "从化校区 实训一号楼 102", "date": "2026-09-14"}, {"name": "单片机与嵌入式技术应用", "teacher": "曹惠茹", "weekday": 2, "startLesson": 1, "len": 4, "classroom": "从化校区 计算机楼 204", "date": "2026-09-15"}, {"name": "计算机网络基础", "teacher": "王欣", "weekday": 2, "startLesson": 5, "len": 3, "classroom": "从化校区 计算机楼 302", "date": "2026-09-15"}, {"name": "传感器技术及应用", "teacher": "刘志强", "weekday": 3, "startLesson": 1, "len": 3, "classroom": "从化校区 计算机楼 202", "date": "2026-09-16"}, {"name": "操作系统", "teacher": "杨光耀", "weekday": 3, "startLesson": 5, "len": 3, "classroom": "从化校区 计算机楼 401", "date": "2026-09-16"}, {"name": "形势与政策", "teacher": "马国水", "weekday": 3, "startLesson": 9, "len": 2, "classroom": "从化校区 综合教学楼 105", "date": "2026-09-16"}, {"name": "Java程序设计基础", "teacher": "曾光辉", "weekday": 4, "startLesson": 1, "len": 4, "classroom": "从化校区 计算机楼 201", "date": "2026-09-17"}, {"name": "模拟电子技术", "teacher": "李政楠", "weekday": 5, "startLesson": 1, "len": 3, "classroom": "从化校区 计算机楼 202", "date": "2026-09-18"}], "3": [{"name": "习近平新时代中国特色社会主义思想概论", "teacher": "张运萍", "weekday": 1, "startLesson": 1, "len": 3, "classroom": "从化校区 实训一号楼 102", "date": "2026-09-21"}, {"name": "单片机与嵌入式技术应用", "teacher": "曹惠茹", "weekday": 2, "startLesson": 1, "len": 4, "classroom": "从化校区 计算机楼 204", "date": "2026-09-22"}, {"name": "计算机网络基础", "teacher": "王欣", "weekday": 2, "startLesson": 5, "len": 3, "classroom": "从化校区 计算机楼 302", "date": "2026-09-22"}, {"name": "传感器技术及应用", "teacher": "刘志强", "weekday": 3, "startLesson": 1, "len": 3, "classroom": "从化校区 计算机楼 202", "date": "2026-09-23"}, {"name": "操作系统", "teacher": "杨光耀", "weekday": 3, "startLesson": 5, "len": 3, "classroom": "从化校区 计算机楼 401", "date": "2026-09-23"}, {"name": "形势与政策", "teacher": "马国水", "weekday": 3, "startLesson": 9, "len": 2, "classroom": "从化校区 综合教学楼 105", "date": "2026-09-23"}, {"name": "Java程序设计基础", "teacher": "曾光辉", "weekday": 4, "startLesson": 1, "len": 4, "classroom": "从化校区 计算机楼 201", "date": "2026-09-24"}, {"name": "模拟电子技术", "teacher": "李政楠", "weekday": 5, "startLesson": 1, "len": 3, "classroom": "从化校区 计算机楼 202", "date": "2026-09-25"}], "4": [{"name": "习近平新时代中国特色社会主义思想概论", "teacher": "张运萍", "weekday": 1, "startLesson": 1, "len": 3, "classroom": "从化校区 实训一号楼 102", "date": "2026-09-28"}, {"name": "单片机与嵌入式技术应用", "teacher": "曹惠茹", "weekday": 2, "startLesson": 1, "len": 4, "classroom": "从化校区 计算机楼 204", "date": "2026-09-29"}, {"name": "计算机网络基础", "teacher": "王欣", "weekday": 2, "startLesson": 5, "len": 3, "classroom": "从化校区 计算机楼 302", "date": "2026-09-29"}, {"name": "传感器技术及应用", "teacher": "刘志强", "weekday": 3, "startLesson": 1, "len": 3, "classroom": "从化校区 计算机楼 202", "date": "2026-09-30"}, {"name": "操作系统", "teacher": "杨光耀", "weekday": 3, "startLesson": 5, "len": 3, "classroom": "从化校区 计算机楼 401", "date": "2026-09-30"}, {"name": "形势与政策", "teacher": "马国水", "weekday": 3, "startLesson": 9, "len": 2, "classroom": "从化校区 综合教学楼 105", "date": "2026-09-30"}, {"name": "Java程序设计基础", "teacher": "曾光辉", "weekday": 4, "startLesson": 1, "len": 4, "classroom": "从化校区 计算机楼 201", "date": "2026-10-01"}, {"name": "模拟电子技术", "teacher": "李政楠", "weekday": 5, "startLesson": 1, "len": 3, "classroom": "从化校区 计算机楼 202", "date": "2026-10-02"}], "5": [{"name": "习近平新时代中国特色社会主义思想概论", "teacher": "张运萍", "weekday": 1, "startLesson": 1, "len": 3, "classroom": "从化校区 实训一号楼 102", "date": "2026-10-05"}, {"name": "单片机与嵌入式技术应用", "teacher": "曹惠茹", "weekday": 2, "startLesson": 1, "len": 4, "classroom": "从化校区 计算机楼 204", "date": "2026-10-06"}, {"name": "计算机网络基础", "teacher": "王欣", "weekday": 2, "startLesson": 5, "len": 3, "classroom": "从化校区 计算机楼 302", "date": "2026-10-06"}, {"name": "传感器技术及应用", "teacher": "刘志强", "weekday": 3, "startLesson": 1, "len": 3, "classroom": "从化校区 计算机楼 202", "date": "2026-10-07"}, {"name": "操作系统", "teacher": "杨光耀", "weekday": 3, "startLesson": 5, "len": 3, "classroom": "从化校区 计算机楼 401", "date": "2026-10-07"}, {"name": "形势与政策", "teacher": "马国水", "weekday": 3, "startLesson": 9, "len": 2, "classroom": "从化校区 综合教学楼 105", "date": "2026-10-07"}, {"name": "Java程序设计基础", "teacher": "曾光辉", "weekday": 4, "startLesson": 1, "len": 4, "classroom": "从化校区 计算机楼 201", "date": "2026-10-08"}, {"name": "模拟电子技术", "teacher": "李政楠", "weekday": 5, "startLesson": 1, "len": 3, "classroom": "从化校区 计算机楼 202", "date": "2026-10-09"}], "6": [{"name": "习近平新时代中国特色社会主义思想概论", "teacher": "张运萍", "weekday": 1, "startLesson": 1, "len": 3, "classroom": "从化校区 实训一号楼 102", "date": "2026-10-12"}, {"name": "单片机与嵌入式技术应用", "teacher": "曹惠茹", "weekday": 2, "startLesson": 1, "len": 4, "classroom": "从化校区 计算机楼 204", "date": "2026-10-13"}, {"name": "计算机网络基础", "teacher": "王欣", "weekday": 2, "startLesson": 5, "len": 3, "classroom": "从化校区 计算机楼 302", "date": "2026-10-13"}, {"name": "传感器技术及应用", "teacher": "刘志强", "weekday": 3, "startLesson": 1, "len": 3, "classroom": "从化校区 计算机楼 202", "date": "2026-10-14"}, {"name": "操作系统", "teacher": "杨光耀", "weekday": 3, "startLesson": 5, "len": 3, "classroom": "从化校区 计算机楼 401", "date": "2026-10-14"}, {"name": "Java程序设计基础", "teacher": "曾光辉", "weekday": 4, "startLesson": 1, "len": 4, "classroom": "从化校区 计算机楼 201", "date": "2026-10-15"}, {"name": "模拟电子技术", "teacher": "李政楠", "weekday": 5, "startLesson": 1, "len": 3, "classroom": "从化校区 计算机楼 202", "date": "2026-10-16"}], "7": [{"name": "习近平新时代中国特色社会主义思想概论", "teacher": "张运萍", "weekday": 1, "startLesson": 1, "len": 3, "classroom": "从化校区 实训一号楼 102", "date": "2026-10-19"}, {"name": "单片机与嵌入式技术应用", "teacher": "曹惠茹", "weekday": 2, "startLesson": 1, "len": 4, "classroom": "从化校区 计算机楼 204", "date": "2026-10-20"}, {"name": "计算机网络基础", "teacher": "王欣", "weekday": 2, "startLesson": 5, "len": 3, "classroom": "从化校区 计算机楼 302", "date": "2026-10-20"}, {"name": "传感器技术及应用", "teacher": "刘志强", "weekday": 3, "startLesson": 1, "len": 3, "classroom": "从化校区 计算机楼 202", "date": "2026-10-21"}, {"name": "操作系统", "teacher": "杨光耀", "weekday": 3, "startLesson": 5, "len": 3, "classroom": "从化校区 计算机楼 401", "date": "2026-10-21"}, {"name": "Java程序设计基础", "teacher": "曾光辉", "weekday": 4, "startLesson": 1, "len": 4, "classroom": "从化校区 计算机楼 201", "date": "2026-10-22"}, {"name": "模拟电子技术", "teacher": "李政楠", "weekday": 5, "startLesson": 1, "len": 3, "classroom": "从化校区 计算机楼 202", "date": "2026-10-23"}], "8": [{"name": "习近平新时代中国特色社会主义思想概论", "teacher": "张运萍", "weekday": 1, "startLesson": 1, "len": 3, "classroom": "从化校区 实训一号楼 102", "date": "2026-10-26"}, {"name": "单片机与嵌入式技术应用", "teacher": "曹惠茹", "weekday": 2, "startLesson": 1, "len": 4, "classroom": "从化校区 计算机楼 204", "date": "2026-10-27"}, {"name": "计算机网络基础", "teacher": "王欣", "weekday": 2, "startLesson": 5, "len": 3, "classroom": "从化校区 计算机楼 302", "date": "2026-10-27"}, {"name": "传感器技术及应用", "teacher": "刘志强", "weekday": 3, "startLesson": 1, "len": 3, "classroom": "从化校区 计算机楼 202", "date": "2026-10-28"}, {"name": "操作系统", "teacher": "杨光耀", "weekday": 3, "startLesson": 5, "len": 3, "classroom": "从化校区 计算机楼 401", "date": "2026-10-28"}, {"name": "Java程序设计基础", "teacher": "曾光辉", "weekday": 4, "startLesson": 1, "len": 4, "classroom": "从化校区 计算机楼 201", "date": "2026-10-29"}, {"name": "模拟电子技术", "teacher": "李政楠", "weekday": 5, "startLesson": 1, "len": 3, "classroom": "从化校区 计算机楼 202", "date": "2026-10-30"}], "9": [{"name": "习近平新时代中国特色社会主义思想概论", "teacher": "张运萍", "weekday": 1, "startLesson": 1, "len": 3, "classroom": "从化校区 实训一号楼 102", "date": "2026-11-02"}, {"name": "单片机与嵌入式技术应用", "teacher": "曹惠茹", "weekday": 2, "startLesson": 1, "len": 4, "classroom": "从化校区 计算机楼 204", "date": "2026-11-03"}, {"name": "计算机网络基础", "teacher": "王欣", "weekday": 2, "startLesson": 5, "len": 3, "classroom": "从化校区 计算机楼 302", "date": "2026-11-03"}, {"name": "传感器技术及应用", "teacher": "刘志强", "weekday": 3, "startLesson": 1, "len": 3, "classroom": "从化校区 计算机楼 202", "date": "2026-11-04"}, {"name": "操作系统", "teacher": "杨光耀", "weekday": 3, "startLesson": 5, "len": 3, "classroom": "从化校区 计算机楼 401", "date": "2026-11-04"}, {"name": "Java程序设计基础", "teacher": "曾光辉", "weekday": 4, "startLesson": 1, "len": 4, "classroom": "从化校区 计算机楼 201", "date": "2026-11-05"}, {"name": "模拟电子技术", "teacher": "李政楠", "weekday": 5, "startLesson": 1, "len": 3, "classroom": "从化校区 计算机楼 202", "date": "2026-11-06"}], "10": [{"name": "习近平新时代中国特色社会主义思想概论", "teacher": "张运萍", "weekday": 1, "startLesson": 1, "len": 3, "classroom": "从化校区 实训一号楼 102", "date": "2026-11-09"}, {"name": "单片机与嵌入式技术应用", "teacher": "曹惠茹", "weekday": 2, "startLesson": 1, "len": 4, "classroom": "从化校区 计算机楼 204", "date": "2026-11-10"}, {"name": "计算机网络基础", "teacher": "王欣", "weekday": 2, "startLesson": 5, "len": 3, "classroom": "从化校区 计算机楼 302", "date": "2026-11-10"}, {"name": "传感器技术及应用", "teacher": "刘志强", "weekday": 3, "startLesson": 1, "len": 3, "classroom": "从化校区 计算机楼 202", "date": "2026-11-11"}, {"name": "操作系统", "teacher": "杨光耀", "weekday": 3, "startLesson": 5, "len": 3, "classroom": "从化校区 计算机楼 401", "date": "2026-11-11"}, {"name": "Java程序设计基础", "teacher": "曾光辉", "weekday": 4, "startLesson": 1, "len": 4, "classroom": "从化校区 计算机楼 201", "date": "2026-11-12"}, {"name": "模拟电子技术", "teacher": "李政楠", "weekday": 5, "startLesson": 1, "len": 3, "classroom": "从化校区 计算机楼 202", "date": "2026-11-13"}], "11": [{"name": "习近平新时代中国特色社会主义思想概论", "teacher": "张运萍", "weekday": 1, "startLesson": 1, "len": 3, "classroom": "从化校区 实训一号楼 102", "date": "2026-11-16"}, {"name": "单片机与嵌入式技术应用", "teacher": "曹惠茹", "weekday": 2, "startLesson": 1, "len": 4, "classroom": "从化校区 计算机楼 204", "date": "2026-11-17"}, {"name": "计算机网络基础", "teacher": "王欣", "weekday": 2, "startLesson": 5, "len": 3, "classroom": "从化校区 计算机楼 302", "date": "2026-11-17"}, {"name": "传感器技术及应用", "teacher": "刘志强", "weekday": 3, "startLesson": 1, "len": 3, "classroom": "从化校区 计算机楼 202", "date": "2026-11-18"}, {"name": "操作系统", "teacher": "杨光耀", "weekday": 3, "startLesson": 5, "len": 3, "classroom": "从化校区 计算机楼 401", "date": "2026-11-18"}, {"name": "Java程序设计基础", "teacher": "曾光辉", "weekday": 4, "startLesson": 1, "len": 4, "classroom": "从化校区 计算机楼 201", "date": "2026-11-19"}, {"name": "模拟电子技术", "teacher": "李政楠", "weekday": 5, "startLesson": 1, "len": 3, "classroom": "从化校区 计算机楼 202", "date": "2026-11-20"}], "12": [{"name": "习近平新时代中国特色社会主义思想概论", "teacher": "张运萍", "weekday": 1, "startLesson": 1, "len": 3, "classroom": "从化校区 实训一号楼 102", "date": "2026-11-23"}, {"name": "单片机与嵌入式技术应用", "teacher": "曹惠茹", "weekday": 2, "startLesson": 1, "len": 4, "classroom": "从化校区 计算机楼 204", "date": "2026-11-24"}, {"name": "计算机网络基础", "teacher": "王欣", "weekday": 2, "startLesson": 5, "len": 3, "classroom": "从化校区 计算机楼 302", "date": "2026-11-24"}, {"name": "传感器技术及应用", "teacher": "刘志强", "weekday": 3, "startLesson": 1, "len": 3, "classroom": "从化校区 计算机楼 202", "date": "2026-11-25"}, {"name": "操作系统", "teacher": "杨光耀", "weekday": 3, "startLesson": 5, "len": 3, "classroom": "从化校区 计算机楼 401", "date": "2026-11-25"}, {"name": "Java程序设计基础", "teacher": "曾光辉", "weekday": 4, "startLesson": 1, "len": 4, "classroom": "从化校区 计算机楼 201", "date": "2026-11-26"}, {"name": "模拟电子技术", "teacher": "李政楠", "weekday": 5, "startLesson": 1, "len": 3, "classroom": "从化校区 计算机楼 202", "date": "2026-11-27"}], "13": [{"name": "习近平新时代中国特色社会主义思想概论", "teacher": "张运萍", "weekday": 1, "startLesson": 1, "len": 3, "classroom": "从化校区 实训一号楼 102", "date": "2026-11-30"}, {"name": "单片机与嵌入式技术应用", "teacher": "曹惠茹", "weekday": 2, "startLesson": 1, "len": 4, "classroom": "从化校区 计算机楼 204", "date": "2026-12-01"}, {"name": "计算机网络基础", "teacher": "王欣", "weekday": 2, "startLesson": 5, "len": 3, "classroom": "从化校区 计算机楼 302", "date": "2026-12-01"}, {"name": "传感器技术及应用", "teacher": "刘志强", "weekday": 3, "startLesson": 1, "len": 3, "classroom": "从化校区 计算机楼 202", "date": "2026-12-02"}, {"name": "操作系统", "teacher": "杨光耀", "weekday": 3, "startLesson": 5, "len": 3, "classroom": "从化校区 计算机楼 401", "date": "2026-12-02"}, {"name": "Java程序设计基础", "teacher": "曾光辉", "weekday": 4, "startLesson": 1, "len": 4, "classroom": "从化校区 计算机楼 201", "date": "2026-12-03"}, {"name": "模拟电子技术", "teacher": "李政楠", "weekday": 5, "startLesson": 1, "len": 3, "classroom": "从化校区 计算机楼 202", "date": "2026-12-04"}], "14": [{"name": "习近平新时代中国特色社会主义思想概论", "teacher": "张运萍", "weekday": 1, "startLesson": 1, "len": 3, "classroom": "从化校区 实训一号楼 102", "date": "2026-12-07"}, {"name": "单片机与嵌入式技术应用", "teacher": "曹惠茹", "weekday": 2, "startLesson": 1, "len": 4, "classroom": "从化校区 计算机楼 204", "date": "2026-12-08"}, {"name": "计算机网络基础", "teacher": "王欣", "weekday": 2, "startLesson": 5, "len": 3, "classroom": "从化校区 计算机楼 302", "date": "2026-12-08"}, {"name": "传感器技术及应用", "teacher": "刘志强", "weekday": 3, "startLesson": 1, "len": 3, "classroom": "从化校区 计算机楼 202", "date": "2026-12-09"}, {"name": "操作系统", "teacher": "杨光耀", "weekday": 3, "startLesson": 5, "len": 3, "classroom": "从化校区 计算机楼 401", "date": "2026-12-09"}, {"name": "Java程序设计基础", "teacher": "曾光辉", "weekday": 4, "startLesson": 1, "len": 4, "classroom": "从化校区 计算机楼 201", "date": "2026-12-10"}, {"name": "模拟电子技术", "teacher": "李政楠", "weekday": 5, "startLesson": 1, "len": 3, "classroom": "从化校区 计算机楼 202", "date": "2026-12-11"}], "15": [{"name": "习近平新时代中国特色社会主义思想概论", "teacher": "张运萍", "weekday": 1, "startLesson": 1, "len": 3, "classroom": "从化校区 实训一号楼 102", "date": "2026-12-14"}, {"name": "单片机与嵌入式技术应用", "teacher": "曹惠茹", "weekday": 2, "startLesson": 1, "len": 4, "classroom": "从化校区 计算机楼 204", "date": "2026-12-15"}, {"name": "计算机网络基础", "teacher": "王欣", "weekday": 2, "startLesson": 5, "len": 3, "classroom": "从化校区 计算机楼 302", "date": "2026-12-15"}, {"name": "传感器技术及应用", "teacher": "刘志强", "weekday": 3, "startLesson": 1, "len": 3, "classroom": "从化校区 计算机楼 202", "date": "2026-12-16"}, {"name": "操作系统", "teacher": "杨光耀", "weekday": 3, "startLesson": 5, "len": 3, "classroom": "从化校区 计算机楼 401", "date": "2026-12-16"}, {"name": "Java程序设计基础", "teacher": "曾光辉", "weekday": 4, "startLesson": 1, "len": 4, "classroom": "从化校区 计算机楼 201", "date": "2026-12-17"}, {"name": "模拟电子技术", "teacher": "李政楠", "weekday": 5, "startLesson": 1, "len": 3, "classroom": "从化校区 计算机楼 202", "date": "2026-12-18"}], "16": [{"name": "习近平新时代中国特色社会主义思想概论", "teacher": "张运萍", "weekday": 1, "startLesson": 1, "len": 3, "classroom": "从化校区 实训一号楼 102", "date": "2026-12-21"}, {"name": "单片机与嵌入式技术应用", "teacher": "曹惠茹", "weekday": 2, "startLesson": 1, "len": 4, "classroom": "从化校区 计算机楼 204", "date": "2026-12-22"}, {"name": "计算机网络基础", "teacher": "王欣", "weekday": 2, "startLesson": 5, "len": 3, "classroom": "从化校区 计算机楼 302", "date": "2026-12-22"}, {"name": "传感器技术及应用", "teacher": "刘志强", "weekday": 3, "startLesson": 1, "len": 3, "classroom": "从化校区 计算机楼 202", "date": "2026-12-23"}, {"name": "操作系统", "teacher": "杨光耀", "weekday": 3, "startLesson": 5, "len": 3, "classroom": "从化校区 计算机楼 401", "date": "2026-12-23"}, {"name": "Java程序设计基础", "teacher": "曾光辉", "weekday": 4, "startLesson": 1, "len": 4, "classroom": "从化校区 计算机楼 201", "date": "2026-12-24"}, {"name": "模拟电子技术", "teacher": "李政楠", "weekday": 5, "startLesson": 1, "len": 3, "classroom": "从化校区 计算机楼 202", "date": "2026-12-25"}], "17": [{"name": "习近平新时代中国特色社会主义思想概论", "teacher": "张运萍", "weekday": 1, "startLesson": 1, "len": 3, "classroom": "从化校区 实训一号楼 102", "date": "2026-12-28"}, {"name": "单片机与嵌入式技术应用", "teacher": "曹惠茹", "weekday": 2, "startLesson": 1, "len": 4, "classroom": "从化校区 计算机楼 204", "date": "2026-12-29"}, {"name": "计算机网络基础", "teacher": "王欣", "weekday": 2, "startLesson": 5, "len": 3, "classroom": "从化校区 计算机楼 302", "date": "2026-12-29"}, {"name": "传感器技术及应用", "teacher": "刘志强", "weekday": 3, "startLesson": 1, "len": 3, "classroom": "从化校区 计算机楼 202", "date": "2026-12-30"}, {"name": "操作系统", "teacher": "杨光耀", "weekday": 3, "startLesson": 5, "len": 3, "classroom": "从化校区 计算机楼 401", "date": "2026-12-30"}, {"name": "Java程序设计基础", "teacher": "曾光辉", "weekday": 4, "startLesson": 1, "len": 4, "classroom": "从化校区 计算机楼 201", "date": "2026-12-31"}, {"name": "模拟电子技术", "teacher": "李政楠", "weekday": 5, "startLesson": 1, "len": 3, "classroom": "从化校区 计算机楼 202", "date": "2027-01-01"}], "18": [{"name": "习近平新时代中国特色社会主义思想概论", "teacher": "张运萍", "weekday": 1, "startLesson": 1, "len": 3, "classroom": "从化校区 实训一号楼 102", "date": "2027-01-04"}, {"name": "单片机与嵌入式技术应用", "teacher": "曹惠茹", "weekday": 2, "startLesson": 1, "len": 4, "classroom": "从化校区 计算机楼 204", "date": "2027-01-05"}, {"name": "计算机网络基础", "teacher": "王欣", "weekday": 2, "startLesson": 5, "len": 3, "classroom": "从化校区 计算机楼 302", "date": "2027-01-05"}, {"name": "传感器技术及应用", "teacher": "刘志强", "weekday": 3, "startLesson": 1, "len": 3, "classroom": "从化校区 计算机楼 202", "date": "2027-01-06"}, {"name": "操作系统", "teacher": "杨光耀", "weekday": 3, "startLesson": 5, "len": 3, "classroom": "从化校区 计算机楼 401", "date": "2027-01-06"}, {"name": "Java程序设计基础", "teacher": "曾光辉", "weekday": 4, "startLesson": 1, "len": 4, "classroom": "从化校区 计算机楼 201", "date": "2027-01-07"}, {"name": "模拟电子技术", "teacher": "李政楠", "weekday": 5, "startLesson": 1, "len": 3, "classroom": "从化校区 计算机楼 202", "date": "2027-01-08"}], "19": [{"name": "习近平新时代中国特色社会主义思想概论", "teacher": "张运萍", "weekday": 1, "startLesson": 1, "len": 3, "classroom": "从化校区 实训一号楼 102", "date": "2027-01-11"}, {"name": "单片机与嵌入式技术应用", "teacher": "曹惠茹", "weekday": 2, "startLesson": 1, "len": 4, "classroom": "从化校区 计算机楼 204", "date": "2027-01-12"}, {"name": "计算机网络基础", "teacher": "王欣", "weekday": 2, "startLesson": 5, "len": 3, "classroom": "从化校区 计算机楼 302", "date": "2027-01-12"}, {"name": "传感器技术及应用", "teacher": "刘志强", "weekday": 3, "startLesson": 1, "len": 3, "classroom": "从化校区 计算机楼 202", "date": "2027-01-13"}, {"name": "操作系统", "teacher": "杨光耀", "weekday": 3, "startLesson": 5, "len": 3, "classroom": "从化校区 计算机楼 401", "date": "2027-01-13"}], "20": [], "21": [], "22": [], "23": []}};
+var WEEKDAY_CN = DATA.weekday_cn;
+var LESSON_START = ["","09:00","09:45","10:35","11:20","12:05","14:10","14:55","15:40","16:25","19:00","19:45","20:30","21:15"];
+var LESSON_END   = ["","09:40","10:25","11:15","12:00","12:45","14:50","15:35","16:20","17:05","19:40","20:25","21:10","21:55"];
+var PALETTE = ["c0","c1","c2","c3","c4","c5","c6","c7"];
+var NAME_CLS = {};
+function clsFor(name){
+  if(NAME_CLS[name]) return NAME_CLS[name];
+  var h=0; for(var i=0;i<name.length;i++) h=(h*31+name.charCodeAt(i))>>>0;
+  NAME_CLS[name] = PALETTE[h%PALETTE.length]; return NAME_CLS[name];
+}
+function parseDate(s){var p=s.split("-");return new Date(+p[0],+p[1]-1,+p[2]);}
+var w1m = parseDate(DATA.week1_monday);
+var today = new Date(); today = new Date(today.getFullYear(),today.getMonth(),today.getDate());
+var curWeek = Math.floor((today - w1m)/86400000/7) + 1;
+if(curWeek<1)curWeek=1; if(curWeek>23)curWeek=23;
+function fmtDate(d){return d.getFullYear()+"-"+(String(d.getMonth()+1).padStart(2,"0"))+"-"+String(d.getDate()).padStart(2,"0");}
+var todayStr = fmtDate(today);
+document.getElementById("semester").textContent = DATA.semester;
+document.getElementById("cdate").textContent = today.getFullYear()+"年"+(today.getMonth()+1)+"月"+today.getDate()+"日";
+var mSelDay = (today.getDay()===0?7:today.getDay());
+function lessonText(start,len){var e=start+len-1;var seg=len<=1?"第"+start+"节":"第"+start+"-"+e+"节";return seg+" "+LESSON_START[start]+"-"+LESSON_END[e];}
+function isPast(course,week){ if(week!==curWeek) return false; var d=parseDate(course.date); return d<today; }
+
+function renderGrid(week){
+  var list = DATA.by_week[week] || [];
+  document.getElementById("cweek").textContent = "第"+week+"周";
+  var twd = today.getDay()===0?7:today.getDay();
+  var todayCourses = list.filter(function(c){return c.weekday===twd && c.date===todayStr;});
+  document.getElementById("ctoday").textContent = todayCourses.length? todayCourses.length+"门":"无课";
+  document.getElementById("ccount").textContent = list.length+"门";
+  document.getElementById("subinfo").textContent = DATA.semester+" · 当前第"+curWeek+"周 · 展示第"+week+"周";
+  var grid = {}; for(var i=1;i<=13;i++){for(var w=1;w<=7;w++){grid[(w-1)*13+i]=null;}}
+  list.sort(function(a,b){return a.startLesson-b.startLesson;});
+  list.forEach(function(c){
+    var head=(c.weekday-1)*13+c.startLesson;
+    grid[head]={course:c,rowspan:c.len};
+    for(var k=1;k<c.len;k++){var kk=head+k; if(grid[kk]===null) grid[kk]="span";}
+  });
+  var h='<table><thead><tr><th>节次</th>';
+  for(var w=1;w<=7;w++){ var ths = (week===curWeek && w===twd)?'todayhead':''; h+='<th class="'+ths+'">'+(w===twd&&week===curWeek?'⚠ ':'')+WEEKDAY_CN[w]+'</th>'; }
+  h+='</tr></thead><tbody>';
+  for(var ln=1;ln<=13;ln++){
+    h+='<tr><td class="lesson">'+ln+'<span class="tspan">'+LESSON_START[ln]+'-'+LESSON_END[ln]+'</span></td>';
+    for(var w=1;w<=7;w++){
+      var cell=grid[(w-1)*13+ln];
+      var isToday = (week===curWeek && w===twd);
+      var tdCls = isToday?'cell-today':'cell-other';
+      if(cell==="span"){ h+='<td class="'+tdCls+'"></td>'; }
+      else if(cell===null){ h+='<td class="'+tdCls+'"><div class="empty">·</div></td>'; }
+      else{
+        var c=cell.course; var past=isPast(c,week)?' past':'';
+        h+='<td rowspan="'+cell.rowspan+'" class="'+tdCls+'"><div class="course '+clsFor(c.name)+past+'">'
+          +'<div class="t">'+c.name+'</div><div class="tm">'+lessonText(c.startLesson,c.len)+'</div>'
+          +'<div class="rm">'+c.classroom+'</div><div class="tc">'+c.teacher+'</div></div></td>';
+      }
+    }
+    h+='</tr>';
+  }
+  h+='</tbody></table>';
+  document.getElementById("grid").innerHTML = h;
+}
+
+function renderMobile(week){
+  var list = DATA.by_week[week] || [];
+  // 日期条
+  var d = new Date(w1m.getTime() + (week-1)*7*86400000);
+  var daysHtml='<div class="m-day'+(curWeek===week&&d.getTime()===today.getTime()?' today-mark':'')+'" data-wd="1"><div class="dw">周一</div><div class="dd">'+d.getDate()+'</div></div>';
+  var wds=['一','二','三','四','五','六','日'];
+  var monthCache=d.getMonth();
+  for(var i=2;i<=7;i++){
+    var dd = new Date(w1m.getTime() + (week-1)*7*86400000 + (i-1)*86400000);
+    if(dd.getMonth()!==monthCache && dd.getDate()===1){}
+    daysHtml+='<div class="m-day'+(curWeek===week&&fmtDate(dd)===todayStr?' today-mark':'')+'" data-wd="'+i+'"><div class="dw">周'+wds[i-1]+'</div><div class="dd">'+(dd.getMonth()+1)+'/'+dd.getDate()+'</div></div>';
+  }
+  document.getElementById("mDays").innerHTML = daysHtml;
+  // 每天列表
+  var lists={};
+  for(var w=1;w<=7;w++) lists[w]=[];
+  list.sort(function(a,b){return a.startLesson-b.startLesson;});
+  list.forEach(function(c){ lists[c.weekday].push(c); });
+  var body='';
+  for(var w=1;w<=7;w++){
+    var on=(w===mSelDay)?' on':'';
+    body+='<div class="m-list'+on+'" data-wd="'+w+'">';
+    if(lists[w].length===0){ body+='<div class="m-empty-card">这天没有课</div>'; }
+    else{
+      lists[w].forEach(function(c){
+        var past=isPast(c,week)?' past':'';
+        body+='<div class="m-item '+past+'"><div class="t">'+c.name+'</div>'
+          +'<div class="row"><span class="k">节次</span><span>'+lessonText(c.startLesson,c.len)+'</span></div>'
+          +'<div class="row"><span class="k">教室</span><span>'+c.classroom+'</span></div>'
+          +'<div class="row"><span class="k">老师</span><span>'+c.teacher+'</span></div></div>';
+      });
+    }
+    body+='</div>';
+  }
+  document.getElementById("mLists").innerHTML = body;
+  // 绑定日切换
+  var days=document.querySelectorAll('.m-day');
+  for(var j=0;j<days.length;j++){ days[j].onclick = (function(el){return function(){mSelDay=+el.getAttribute('data-wd'); switchMDay();};})(days[j]); }
+  function switchMDay(){
+    var ds=document.querySelectorAll('.m-day');
+    for(var k=0;k<ds.length;k++){ds[k].classList.toggle('on', +ds[k].getAttribute('data-wd')===mSelDay);}
+    var ls=document.querySelectorAll('.m-list');
+    for(var k2=0;k2<ls.length;k2++){ls[k2].classList.toggle('on', +ls[k2].getAttribute('data-wd')===mSelDay);}
+    var active=document.querySelector('.m-day.on'); if(active) active.scrollIntoView({inline:"center",block:"nearest"});
+  }
+  // 初始高亮当前日并滚动到可视区
+  var initD=document.querySelector('.m-day[data-wd="'+mSelDay+'"]');
+  if(initD){initD.classList.add('on'); setTimeout(function(){initD.scrollIntoView({inline:"center",block:"nearest"});},0);}
+}
+
+function render(week){
+  renderGrid(week);
+  renderMobile(week);
+  // 填充周选择框
+  var sel=document.getElementById("weekSel"); sel.innerHTML="";
+  for(var w=1;w<=23;w++){
+    var has=(DATA.by_week[w]&&DATA.by_week[w].length>0);
+    var opt=document.createElement("option"); opt.value=w;
+    opt.textContent="第"+w+"周"+(has?"("+DATA.by_week[w].length+"门)":"");
+    if(w===week){opt.selected=true; if(w===curWeek){opt.textContent+=" ◀ 当前";}}
+    sel.appendChild(opt);
+  }
+}
+document.getElementById("weekSel").addEventListener("change",function(){render(+this.value);});
+render(curWeek);
+</script>
+</body>
+</html>
